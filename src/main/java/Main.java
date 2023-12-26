@@ -1,3 +1,5 @@
+import handlers.ClientConnectionHandlerFactory;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,8 +14,15 @@ public class Main {
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             serverSocket.setReuseAddress(true);
-            Socket clientSocket = serverSocket.accept();
-            System.out.println("accepted new connection");
+            while (true) {
+                try {
+                    Socket clientSocket = serverSocket.accept();
+                    System.out.println("accepted new connection");
+                    ClientConnectionHandlerFactory.getClientConnectionHandler().handleClientConnection(clientSocket);
+                } catch (Exception e) {
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         }
