@@ -1,6 +1,7 @@
 package handlers.http;
 
 import request.HttpRequest;
+import request.HttpRequestHeaderKeys;
 import util.Constants;
 
 import java.io.IOException;
@@ -18,16 +19,28 @@ public class GetHttpRequestHandler implements HttpRequestHandler {
 
     private void testEchoRandomStringParser(String[] parts, HttpRequest httpRequest, Socket clientSocket) throws IOException {
         OutputStream os = clientSocket.getOutputStream();
-        if (parts.length > 2 && parts[1].equals("echo")) {
-            String randomString = parts[2];
-            os.write(Constants.HTTP_OK_DEFAULT_HEADER_RESPONSE_LINE.getBytes());
-            os.write(Constants.CONTENT_TYPE_TEXT_HEADER_LINE.getBytes());
-            os.write((Constants.CONTENT_LENGTH_HEADER_KEY + randomString.length() + "\r\n").getBytes());
-            os.write(Constants.DEFAULT_LINE_SEPARATOR.getBytes());
-            os.write(randomString.getBytes());
-            os.flush();
-            os.close();
-            return;
+        if (parts.length >= 2) {
+            if (parts[1].equals("echo")) {
+                String randomString = parts[2];
+                os.write(Constants.HTTP_OK_DEFAULT_HEADER_RESPONSE_LINE.getBytes());
+                os.write(Constants.CONTENT_TYPE_TEXT_HEADER_LINE.getBytes());
+                os.write((Constants.CONTENT_LENGTH_HEADER_KEY + randomString.length() + "\r\n").getBytes());
+                os.write(Constants.DEFAULT_LINE_SEPARATOR.getBytes());
+                os.write(randomString.getBytes());
+                os.flush();
+                os.close();
+                return;
+            }
+            if (parts[1].equals("user-agent")) {
+                os.write(Constants.HTTP_OK_DEFAULT_HEADER_RESPONSE_LINE.getBytes());
+                os.write(Constants.CONTENT_TYPE_TEXT_HEADER_LINE.getBytes());
+                os.write((Constants.CONTENT_LENGTH_HEADER_KEY + httpRequest.getHeaders().get(HttpRequestHeaderKeys.USER_AGENT).length() + "\r\n").getBytes());
+                os.write(Constants.DEFAULT_LINE_SEPARATOR.getBytes());
+                os.write(httpRequest.getHeaders().get(HttpRequestHeaderKeys.USER_AGENT).getBytes());
+                os.flush();
+                os.close();
+                return;
+            }
         }
         if (httpRequest.getPath().equals("/")) {
             os.write(Constants.HTTP_OK_DEFAULT_HEADER_RESPONSE_LINE.getBytes());
