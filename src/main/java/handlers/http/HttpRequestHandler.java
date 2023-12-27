@@ -1,10 +1,14 @@
 package handlers.http;
 
+import lombok.AllArgsConstructor;
 import request.HttpRequest;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public interface HttpRequestHandler {
-    void handleHttpRequest(Socket clientSocket, HttpRequest httpRequest) throws IOException;
+@AllArgsConstructor
+public abstract class HttpRequestHandler {
+    Socket clientSocket;
+    HttpRequest httpRequest;
+    public abstract void handleHttpRequest() throws IOException;
 }

@@ -1,5 +1,6 @@
 package handlers.http;
 
+import lombok.AllArgsConstructor;
 import request.HttpRequest;
 import request.HttpRequestHeaderKeys;
 import util.Constants;
@@ -8,9 +9,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class GetHttpRequestHandler implements HttpRequestHandler {
+public class GetHttpRequestHandler extends HttpRequestHandler {
+    public GetHttpRequestHandler(Socket clientSocket, HttpRequest httpRequest) {
+        super(clientSocket, httpRequest);
+    }
+
     @Override
-    public void handleHttpRequest(Socket clientSocket, HttpRequest httpRequest) throws IOException {
+    public void handleHttpRequest() throws IOException {
         String[] parts = httpRequest.getPath().split("/", 3);
 
         testEchoRandomStringParser(parts, httpRequest, clientSocket);

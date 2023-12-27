@@ -1,18 +1,24 @@
 package handlers.http;
 
+import lombok.AllArgsConstructor;
 import request.HttpRequest;
 import request.HttpRequestMethod;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public class GenericHttpRequestHandler implements HttpRequestHandler {
+public class GenericHttpRequestHandler extends HttpRequestHandler {
+
+    public GenericHttpRequestHandler(Socket clientSocket, HttpRequest httpRequest) {
+        super(clientSocket, httpRequest);
+    }
+
     @Override
-    public void handleHttpRequest(Socket clientSocket, HttpRequest httpRequest) throws IOException {
+    public void handleHttpRequest() throws IOException {
         if (httpRequest.getHttpMethod() == HttpRequestMethod.GET) {
-            new GetHttpRequestHandler().handleHttpRequest(clientSocket, httpRequest);
+            new GetHttpRequestHandler(clientSocket, httpRequest).handleHttpRequest();
         } else if (httpRequest.getHttpMethod() == HttpRequestMethod.POST) {
-            new PostHttpRequestHandler().handleHttpRequest(clientSocket, httpRequest);
+            new PostHttpRequestHandler(clientSocket, httpRequest).handleHttpRequest();
         } else {
             throw new RuntimeException("Unsupported HTTP Method");
         }

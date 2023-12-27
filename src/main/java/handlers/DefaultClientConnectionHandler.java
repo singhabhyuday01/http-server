@@ -1,19 +1,21 @@
 package handlers;
 
 import handlers.http.GenericHttpRequestHandler;
-import handlers.http.HttpRequestHandler;
 import request.HttpRequest;
-import util.Constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 
-public class DefaultClientConnectionHandler implements ClientConnectionHandler {
-    private HttpRequestHandler httpRequestHandler = new GenericHttpRequestHandler();
+public class DefaultClientConnectionHandler extends ClientConnectionHandler {
+//    private HttpRequestHandler httpRequestHandler = new GenericHttpRequestHandler();
+
+    public DefaultClientConnectionHandler(Socket clientSocket) {
+        super(clientSocket);
+    }
+
     @Override
-    public void handleClientConnection(Socket clientSocket) throws IOException {
+    public void handleClientConnection() throws IOException {
 
         BufferedReader br = new BufferedReader(new java.io.InputStreamReader(clientSocket.getInputStream()));
         HttpRequest httpRequest = new HttpRequest();
@@ -22,7 +24,7 @@ public class DefaultClientConnectionHandler implements ClientConnectionHandler {
 
         parseRequestHeaderKeyValues(br, httpRequest);
 
-        httpRequestHandler.handleHttpRequest(clientSocket, httpRequest);
+        new GenericHttpRequestHandler(clientSocket, httpRequest).handleHttpRequest();
 
     }
 
@@ -60,4 +62,14 @@ public class DefaultClientConnectionHandler implements ClientConnectionHandler {
 
         httpRequest.parseRequestLine(requestLine);
     }
+
+    @Override
+    public void run() {
+        try {
+            handleClientConnection();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
