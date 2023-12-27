@@ -1,5 +1,7 @@
 package handlers;
 
+import handlers.http.GenericHttpRequestHandler;
+import handlers.http.HttpRequestHandler;
 import request.HttpRequest;
 import util.Constants;
 
@@ -9,6 +11,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class DefaultClientConnectionHandler implements ClientConnectionHandler {
+    private HttpRequestHandler httpRequestHandler = new GenericHttpRequestHandler();
     @Override
     public void handleClientConnection(Socket clientSocket) throws IOException {
 
@@ -19,22 +22,13 @@ public class DefaultClientConnectionHandler implements ClientConnectionHandler {
 
         parseRequestHeaderKeyValues(br, httpRequest);
 
-        OutputStream os = clientSocket.getOutputStream();
+        httpRequestHandler.handleHttpRequest(clientSocket, httpRequest);
 
-        if (httpRequest.getPath().equals("/")) {
-            os.write(Constants.HTTP_OK_DEFAULT_RESPONSE.getBytes());
-            os.flush();
-            os.close();
-            return;
-        }
-        os.write(Constants.HTTP_NOT_FOUND_DEFAULT_RESPONSE.getBytes());
-        os.flush();
-        os.close();
     }
 
-    private static void parseRequestHeaderKeyValues(BufferedReader br, HttpRequest httpRequest) {
+    private static void parseRequestHeaderKeyValues(BufferedReader br, HttpRequest httpRequest) throws IOException {
         // read the rest of the request header
-        String line;
+        String line = null;
         try {
             line = br.readLine();
         } catch (IOException e) {
@@ -53,7 +47,7 @@ public class DefaultClientConnectionHandler implements ClientConnectionHandler {
 
     private static void parseRequestLine(BufferedReader br, HttpRequest httpRequest) {
         // Read the first line of the request - the request line.
-        String requestLine;
+        String requestLine = null;
         try {
             requestLine = br.readLine();
         } catch (IOException e) {

@@ -15,11 +15,13 @@ public class Main {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             serverSocket.setReuseAddress(true);
             while (true) {
+                Socket clientSocket = serverSocket.accept();
                 try {
-                    Socket clientSocket = serverSocket.accept();
                     System.out.println("accepted new connection");
                     ClientConnectionHandlerFactory.getClientConnectionHandler().handleClientConnection(clientSocket);
                 } catch (Exception e) {
+                    clientSocket.getOutputStream().write("HTTP/1.1 500 Internal Server Error\r\n\r\n".getBytes());
+                    clientSocket.getOutputStream().close();
                     System.out.println("Exception: " + e.getMessage());
                 }
             }

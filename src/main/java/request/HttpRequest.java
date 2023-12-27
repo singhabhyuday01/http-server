@@ -11,7 +11,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 public class HttpRequest {
-    String httpMethod;
+    HttpRequestMethod httpMethod;
     String path;
     String httpVersion;
 
@@ -23,7 +23,7 @@ public class HttpRequest {
             System.err.println("Invalid HTTP Request");
             throw new RuntimeException("Invalid HTTP Request Line");
         }
-        httpMethod = parts[0];
+        httpMethod = HttpRequestMethod.valueOf(parts[0]);
         path = parts[1];
         httpVersion = parts[2];
     }
