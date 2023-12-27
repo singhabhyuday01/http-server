@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class Main {
+public class Server {
     private static int PORT = 4221;
 
     private static final LinkedList<Thread> threads = new LinkedList<>();
