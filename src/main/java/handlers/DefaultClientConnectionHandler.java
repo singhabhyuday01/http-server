@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class DefaultClientConnectionHandler extends ClientConnectionHandler {
-//    private HttpRequestHandler httpRequestHandler = new GenericHttpRequestHandler();
 
     public DefaultClientConnectionHandler(Socket clientSocket) {
         super(clientSocket);

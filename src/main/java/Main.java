@@ -1,4 +1,5 @@
 import handlers.ClientConnectionHandlerFactory;
+import util.State;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,7 +14,11 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            PORT = Integer.parseInt(args[0]);
+            if (args[0].equals("--directory")) {
+                 State.directory = args[1];
+            } else {
+                PORT = Integer.parseInt(args[0]);
+            }
         }
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
