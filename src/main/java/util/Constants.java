@@ -5,6 +5,7 @@ public class Constants {
     public static final String DEFAULT_LINE_SEPARATOR = "\r\n";
 
     public static final String HTTP_OK_DEFAULT_HEADER_RESPONSE_LINE = "HTTP/1.1 200 OK\r\n";
+    public static final String HTTP_CREATED_DEFAULT_HEADER_RESPONSE_LINE = "HTTP/1.1 201 Created\r\n";
     public static final String CONTENT_TYPE_TEXT_HEADER_LINE = "Content-Type: text/plain\r\n";
     public static final String CONTENT_TYPE_OCTET_HEADER_LINE = "Content-Type: application/octet-stream\r\n";
     public static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length: ";

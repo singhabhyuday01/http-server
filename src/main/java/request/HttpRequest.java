@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ public class HttpRequest {
     HttpRequestMethod httpMethod;
     String path;
     String httpVersion;
+    public BufferedReader br;
 
     Map<HttpRequestHeaderKeys, String> headers = new HashMap<>();
 

@@ -53,6 +53,7 @@ public class GetHttpRequestHandler extends HttpRequestHandler {
 
         if (!file.exists() || file.isDirectory()) {
             handle404NotFound(os);
+            return;
         }
 
         os.write(Constants.HTTP_OK_DEFAULT_HEADER_RESPONSE_LINE.getBytes());
@@ -76,13 +77,6 @@ public class GetHttpRequestHandler extends HttpRequestHandler {
 
     private static void handleEmptyPath(OutputStream os) throws IOException {
         os.write(Constants.HTTP_OK_DEFAULT_HEADER_RESPONSE_LINE.getBytes());
-        os.write(Constants.DEFAULT_LINE_SEPARATOR.getBytes());
-        os.flush();
-        os.close();
-    }
-
-    private static void handle404NotFound(OutputStream os) throws IOException {
-        os.write(Constants.HTTP_NOT_FOUND_DEFAULT_RESPONSE.getBytes());
         os.write(Constants.DEFAULT_LINE_SEPARATOR.getBytes());
         os.flush();
         os.close();

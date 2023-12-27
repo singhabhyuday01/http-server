@@ -5,6 +5,8 @@ import request.HttpRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class DefaultClientConnectionHandler extends ClientConnectionHandler {
@@ -16,12 +18,12 @@ public class DefaultClientConnectionHandler extends ClientConnectionHandler {
     @Override
     public void handleClientConnection() throws IOException {
 
-        BufferedReader br = new BufferedReader(new java.io.InputStreamReader(clientSocket.getInputStream()));
         HttpRequest httpRequest = new HttpRequest();
+        httpRequest.br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-        parseRequestLine(br, httpRequest);
+        parseRequestLine(httpRequest.br, httpRequest);
 
-        parseRequestHeaderKeyValues(br, httpRequest);
+        parseRequestHeaderKeyValues(httpRequest.br, httpRequest);
 
         new GenericHttpRequestHandler(clientSocket, httpRequest).handleHttpRequest();
 
@@ -29,7 +31,7 @@ public class DefaultClientConnectionHandler extends ClientConnectionHandler {
 
     private static void parseRequestHeaderKeyValues(BufferedReader br, HttpRequest httpRequest) throws IOException {
         // read the rest of the request header
-        String line = null;
+        String line;
         try {
             line = br.readLine();
         } catch (IOException e) {
